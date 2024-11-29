@@ -15,7 +15,7 @@ export default function Live() {
                         <p className="m-5 text-xs text-gray-600">
                             Watch the latest Nepal Premier League 2024 competition live!
                         </p>
-                        <Link href="./Live_Stream" passHref>
+                        <Link href="./live-stream" passHref>
                             <Button className="m-2 w-full text-xs bg-[#2e3192] hover:bg-red-700 text-white">
                                 Watch Now Live
                             </Button>
