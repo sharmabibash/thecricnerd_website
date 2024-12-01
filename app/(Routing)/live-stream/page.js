@@ -1,152 +1,97 @@
-'use client';
+"use client";
 
-import { useState, useRef, useEffect } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { PlayCircle, ArrowLeft, Maximize2 } from 'lucide-react';
-import axios from 'axios';
+const topWicketTakers = [
+    { name: "John Doe", wickets: 25, matches: 10, average: 15.2 },
+    { name: "Jane Smith", wickets: 22, matches: 10, average: 16.8 },
+    { name: "Mike Johnson", wickets: 20, matches: 9, average: 17.5 },
+    { name: "Sarah Williams", wickets: 18, matches: 10, average: 18.2 },
+    { name: "Tom Brown", wickets: 17, matches: 8, average: 16.9 },
+];
 
-export default function Live_Stream() {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const videoContainerRef = useRef(null);
-    const [npl, setNpl] = useState([]);
-    const [error, setError] = useState(null);
-    const API_NPL = process.env.NEXT_PUBLIC_API_NPL;
-    const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+const topRunScorers = [
+    { name: "Emma Wilson", runs: 450, matches: 10, average: 45.0 },
+    { name: "David Lee", runs: 425, matches: 9, average: 47.2 },
+    { name: "Sophie Taylor", runs: 400, matches: 10, average: 40.0 },
+    { name: "Chris Anderson", runs: 380, matches: 8, average: 47.5 },
+    { name: "Alex Martinez", runs: 360, matches: 10, average: 36.0 },
+];
 
-    const extractVideoId = (url) => {
-        try {
-            const urlObj = new URL(url);
-            if (urlObj.pathname.startsWith('/live/')) {
-                return urlObj.pathname.split('/live/')[1];
-            }
-            return null;
-        } catch (error) {
-            console.error('Invalid URL:', error);
-            return null;
-        }
-    };
-
-    const liveUrl = 'https://www.youtube.com/live/XDRyffzokis?si=rUJZexLQwLdenQf5';
-    const videoId = extractVideoId(liveUrl);
-
-    const handleFullScreen = () => {
-        if (videoContainerRef.current) {
-            if (videoContainerRef.current.requestFullscreen) {
-                videoContainerRef.current.requestFullscreen();
-            } else if (videoContainerRef.current.webkitRequestFullscreen) {
-                videoContainerRef.current.webkitRequestFullscreen();
-            } else if (videoContainerRef.current.msRequestFullscreen) {
-                videoContainerRef.current.msRequestFullscreen();
-            }
-        }
-    };
-
-    useEffect(() => {
-        const getNpl = async () => {
-            try {
-                const response = await axios.get(API_NPL, { params: { GetNPL: true } });
-                console.log('API Response:', response.data);
-                if (Array.isArray(response.data)) {
-                    setNpl(response.data);
-                } else {
-                    console.error('API returned unexpected format:', response.data);
-                    setNpl([]);
-                }
-            } catch (err) {
-                console.error('Error fetching NPL data:', err);
-                setError('Failed to fetch data');
-                setNpl([]);
-            }
-        };
-
-        getNpl();
-    }, [API_BASE_URL, API_NPL]);
-
+function Card({ title, children }) {
     return (
-        <>
-            <head>
-                <title>Live Stream | The Cricket Nerd | Watch Nepal Cricket Matches Live</title>
-                <meta name="description" content="Watch live streams of Nepal cricket matches on The Cricket Nerd. Stay updated with real-time action, match commentary, and exclusive coverage of your favorite games." />
-                <meta name="keywords" content="live stream cricket, watch Nepal cricket live, cricket streaming, Nepal cricket live matches, live cricket commentary, cricket live action, live streaming Nepal, The Cricket Nerd live stream, cricket matches live" />
-                <meta name="robots" content="index, follow" />
-                <link rel="canonical" href="https://www.thecricketnerd.com/live-stream" />
-                <link rel="icon" href="/favicon.ico" />
-                <meta property="og:title" content="Live Stream | The Cricket Nerd | Watch Nepal Cricket Matches Live" />
-                <meta property="og:description" content="Watch live streams of Nepal cricket matches on The Cricket Nerd. Stay updated with real-time action, match commentary, and exclusive coverage of your favorite games." />
-                <meta property="og:type" content="website" />
-                <meta property="og:image" content="https://www.thecricnerd.com/Images/Logo/The Cricket Nerd.png" />
-                <meta property="og:url" content="https://www.thecricketnerd.com/live-stream" />
-                <meta property="og:locale" content="en_US" />
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Live Stream | The Cricket Nerd | Watch Nepal Cricket Matches Live" />
-                <meta name="twitter:description" content="Watch live streams of Nepal cricket matches on The Cricket Nerd. Stay updated with real-time action, match commentary, and exclusive coverage of your favorite games." />
-                <meta name="twitter:image" content="https://www.thecricnerd.com/Images/Logo/The Cricket Nerd.png" />
-                <link rel="me" href="https://www.facebook.com/thecricketnerd01/" />
-                <link rel="me" href="https://www.instagram.com/thecricketnerd17/" />
-            </head>
+        <div className="border border-gray-300 rounded-lg shadow-lg bg-white p-6">
+            <h2 className="text-2xl font-semibold mb-6 text-center text-[#2e3192]">{title}</h2>
+            {children}
+        </div>
+    );
+}
 
-            <div className="col min-h-100 items-center justify-center bg-gray-100 p-4">
-                <div className="w-full max-w-3xl bg-white rounded-lg shadow-xl overflow-hidden">
-                    <div className="p-6">
-                        <div className="flex justify-between items-center mb-4">
-                            <Link href="/" passHref>
-                                <Button variant="ghost" className="flex items-center space-x-2">
-                                    <ArrowLeft className="w-4 h-4" />
-                                    <span>Back</span>
-                                </Button>
-                            </Link>
-                            <h1 className="text-3xl font-bold text-gray-800">NPL 2024</h1>
-                        </div>
-
-                        {npl.map((item, index) => (
-                            <div
+function Table({ headers, rows }) {
+    return (
+        <div className="overflow-x-auto shadow-md rounded-lg">
+            <table className="w-full border-collapse text-sm sm:text-xs">
+                <thead>
+                    <tr className="bg-gray-100 text-gray-600">
+                        {headers.map((header, index) => (
+                            <th
                                 key={index}
-                                ref={videoContainerRef}
-                                className="relative aspect-video bg-gray-200 flex items-center justify-center"
+                                className={`text-[#2e3192] border-b-2 px-6 py-3 text-left whitespace-nowrap font-medium ${index === 3 ? 'text-right' : ''}`}
                             >
-                                {isPlaying && videoId ? (
-                                    <iframe
-                                        className="w-full h-full"
-                                        src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
-                                        title="YouTube video player"
-                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                        allowFullScreen
-                                    ></iframe>
-                                ) : (
-
-                                    item.ID === '1' && (
-                                        <img
-                                            src={`${API_BASE_URL + item.Thumbnail}`}
-                                            alt="NPL 2024 Preview"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    )
-                                )}
-                            </div>
+                                {header}
+                            </th>
                         ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {rows.map((row, rowIndex) => (
+                        <tr key={rowIndex} className={`${rowIndex % 2 === 0 ? 'bg-gray-50' : 'bg-white'} hover:bg-gray-200`}>
+                            {row.map((cell, cellIndex) => (
+                                <td
+                                    key={cellIndex}
+                                    className={`px-6 py-4 ${cellIndex === 3 ? 'text-right' : 'text-left'} whitespace-nowrap`}
+                                >
+                                    {cell}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
 
-                        <div className="mt-6 flex justify-center space-x-4">
-                            <Button
-                                onClick={() => setIsPlaying(true)}
-                                disabled={isPlaying}
-                                className={`flex items-center space-x-2 text-xs hover:bg-red-700 ${isPlaying ? 'opacity-50 cursor-not-allowed' : ''}`}
-                            >
-                                <PlayCircle className="w-5 h-5 text-white" />
-                                <span className="text-white">Watch Now</span>
-                            </Button>
+export default function NPLStatsPage() {
+    return (
+        <div className="max-w-6xl mx-auto py-12 px-6 sm:px-4 pl-4">
+            <h1 className="text-4xl font-bold mb-10 text-center text-[#2e3192] sm:text-3xl">
+                NPL 2024 Statistics
+            </h1>
 
-                            <Button
-                                onClick={handleFullScreen}
-                                className="flex items-center space-x-2 text-xs hover:bg-red-700"
-                            >
-                                <Maximize2 className="w-5 h-5 text-white" />
-                                <span className="text-white">Fullscreen</span>
-                            </Button>
-                        </div>
-                    </div>
-                </div>
+            <div className="grid gap-12 grid-cols-1 md:grid-cols-2 ">
+                <Card title="Top Wicket Takers">
+                    <Table
+                        headers={["Name", "Wickets", "Matches", "Economy"]}
+                        rows={topWicketTakers.map((player) => [
+                            player.name,
+                            player.wickets,
+                            player.matches,
+                            player.average.toFixed(2),
+                        ])}
+                    />
+                </Card>
+
+                <Card title="Top Run Scorers">
+                    <Table
+                        headers={["Name", "Runs", "Matches", "Average"]}
+                        rows={topRunScorers.map((player) => [
+                            player.name,
+                            player.runs,
+                            player.matches,
+                            player.average.toFixed(2),
+                        ])}
+                    />
+                </Card>
             </div>
-        </>
+        </div>
     );
 }

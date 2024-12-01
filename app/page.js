@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <>
       <h1 className="hidden">The Cricket Nerd | Nepal Cricket News, Matches, Players</h1>
-      <Live Match />
+      <Live Match></Live>
       <Matches />
       <LatestNews />
       <YoutubeSlider />
