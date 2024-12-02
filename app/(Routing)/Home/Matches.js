@@ -50,24 +50,24 @@ const Match = () => {
 
               return (
                 <a href={match['Link']} key={match['ID']}>
-                <div className="bg-card rounded-lg border border-muted p-4 flex flex-col gap-6">
-                  <h2>{match['Tournament Name']}</h2>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <img src={`${API_FLAG + match['FlagA']}`} className="w-[40px] h-[40px] object-contain" />
-                      <span className="text-xs">{match['Country A']}</span>
+                  <div className="bg-card rounded-lg border border-muted p-4 flex flex-col gap-6">
+                    <h2>{match['Tournament Name']}</h2>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <img src={`${API_FLAG + match['FlagA']}`} className="w-[40px] h-[40px] object-contain" />
+                        <span className="text-xs">{match['Country A']}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs">{match['Country B']}</span>
+                        <img src={`${API_FLAG + match['FlagB']}`} className="object-contain w-[40px] h-[40px]" />
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs">{match['Country B']}</span>
-                      <img src={`${API_FLAG + match['FlagB']}`} className="object-contain w-[40px] h-[40px]" />
+                    <div className="flex flex-col items-start justify-between gap-2">
+                      <div className="text-sm text-muted-foreground">
+                        {formattedTime} - {formattedDate}
+                      </div>
                     </div>
                   </div>
-                  <div className="flex flex-col items-start justify-between gap-2">
-                    <div className="text-sm text-muted-foreground">
-                     {formattedTime} - {formattedDate}
-                    </div>
-                  </div>
-                </div>
                 </a>
               );
             })}
