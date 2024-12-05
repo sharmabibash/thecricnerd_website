@@ -19,21 +19,27 @@ export default function Live() {
 
                 if (data.length > 0) {
                     const topRunScorer = data.reduce((best, current) => {
-                        return (current['Run Scored'] > best['Run Scored'] ||
-                            (current['Run Scored'] === best['Run Scored'] && current['Batting Average'] > best['Batting Average']))
+                        const currentRuns = parseInt(current['Run Scored'], 10) || 0;
+                        const bestRuns = parseInt(best['Run Scored'], 10) || 0;
+                        const currentAverage = parseFloat(current['Batting Average']) || 0;
+                        const bestAverage = parseFloat(best['Batting Average']) || 0;
+
+                        return (currentRuns > bestRuns ||
+                            (currentRuns === bestRuns && currentAverage > bestAverage))
                             ? current : best;
                     }, data[0]);
 
                     setMostRuns({
-                        player: topRunScorer['Player Name'],
-                        score: topRunScorer['Run Scored'],
-                        average: topRunScorer['Batting Average']
+                        player: topRunScorer['Player Name'] || "Unknown Player",
+                        score: topRunScorer['Run Scored'] || 0,
+                        average: topRunScorer['Batting Average'] || "0.00"
                     });
                 }
             } catch (error) {
                 console.error('Error fetching most runs:', error);
             }
         };
+
 
         const fetchMostWickets = async () => {
             try {
