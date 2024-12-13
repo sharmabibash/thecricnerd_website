@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+
 function Card({ title, children }) {
     return (
         <div className="border border-gray-300 rounded-lg shadow-lg bg-white p-6">
@@ -87,7 +89,7 @@ export default function NPLStatsPage() {
     }
 
     return (
-        <div className="max-w-6xl mx-auto py-12 px-6 sm:px-4 pl-4">
+        <><head><title>NPL 2024 Statistics</title></head ><div className="max-w-6xl mx-auto py-12 px-6 sm:px-4 pl-4">
             <h1 className="text-4xl font-bold mb-10 text-center text-[#2e3192] sm:text-3xl">
                 NPL 2024 Statistics
             </h1>
@@ -102,8 +104,7 @@ export default function NPLStatsPage() {
                             player['Total Wickets'],
                             player['Total Match'],
                             player['Economy']
-                        ])}
-                    />
+                        ])} />
                 </Card>
 
                 <Card title="Top Run Scorers">
@@ -115,10 +116,9 @@ export default function NPLStatsPage() {
                             player['Run Scored'],
                             player['Total Match'],
                             player['Batting Average']
-                        ])}
-                    />
+                        ])} />
                 </Card>
             </div>
-        </div>
+        </div></>
     );
 }

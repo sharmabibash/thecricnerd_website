@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 function Card({ title, children }) {
     return (
         <div className="border border-gray-300 rounded-lg shadow-lg bg-white p-6">
@@ -9,6 +10,7 @@ function Card({ title, children }) {
         </div>
     );
 }
+
 function Table({ headers, rows }) {
     return (
         <div className="overflow-x-auto shadow-md rounded-lg">
@@ -18,8 +20,7 @@ function Table({ headers, rows }) {
                         {headers.map((header, index) => (
                             <th
                                 key={index}
-                                className={`text-[#2e3192] border-b-2 px-6 py-3 text-left whitespace-nowrap font-medium ${index === headers.length - 1 ? "text-right" : ""
-                                    }`}
+                                className={`text-[#2e3192] border-b-2 px-6 py-3 text-left whitespace-nowrap font-medium ${index === headers.length - 1 ? "text-right" : ""}`}
                             >
                                 {header}
                             </th>
@@ -30,14 +31,12 @@ function Table({ headers, rows }) {
                     {rows.map((row, rowIndex) => (
                         <tr
                             key={rowIndex}
-                            className={`${rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"
-                                } hover:bg-gray-200`}
+                            className={`${rowIndex % 2 === 0 ? "bg-gray-50" : "bg-white"} hover:bg-gray-200`}
                         >
                             {row.map((cell, cellIndex) => (
                                 <td
                                     key={cellIndex}
-                                    className={`px-6 py-4 ${cellIndex === headers.length - 1 ? "text-right" : "text-left"
-                                        } whitespace-nowrap`}
+                                    className={`px-6 py-4 ${cellIndex === headers.length - 1 ? "text-right" : "text-left"} whitespace-nowrap`}
                                 >
                                     {cell}
                                 </td>
@@ -49,8 +48,6 @@ function Table({ headers, rows }) {
         </div>
     );
 }
-
-// Main Component
 export default function CricketPointsTable() {
     const [pointsTable, setPointsTable] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -71,7 +68,19 @@ export default function CricketPointsTable() {
                 });
                 const data = response.data;
                 if (Array.isArray(data)) {
-                    setPointsTable(data);
+                    const pointsTableWithPoints = data.map(team => ({
+                        ...team,
+                        points: team.Wins * 2
+                    }));
+
+
+                    const sortedPointsTable = pointsTableWithPoints.sort((a, b) => {
+                        if (a.points > b.points) return -1;
+                        if (a.points < b.points) return 1;
+                        return parseFloat(b.netRunRate) > parseFloat(a.netRunRate) ? -1 : 1;
+                    });
+
+                    setPointsTable(sortedPointsTable);
                 } else {
                     throw new Error("Data received from API is not an array.");
                 }
@@ -93,28 +102,12 @@ export default function CricketPointsTable() {
         return <div className="text-center mt-10 text-red-500">Error fetching points table: {errorMessage}</div>;
     }
 
-    const pointsTableWithPoints = pointsTable.map((team) => ({
-        ...team,
-        points: team.Wins * 2,
-    }));
-
-    const sortedPointsTable = pointsTableWithPoints.sort((a, b) => {
-        if (a.points > b.points) return -1;
-        if (a.points < b.points) return 1;
-
-        return parseFloat(b.netRunRate) - parseFloat(a.netRunRate);
-    });
-
     return (
-        <div className="max-w-6xl mx-auto py-12 px-6 sm:px-4">
-            {/* <h1 className="text-4xl font-bold mb-10 text-center text-[#2e3192] sm:text-3xl">
-                Points Table
-            </h1> */}
-
+        <><head><title>{`${pointsTable[0]?.Title} Standings`}</title></head><div className="max-w-6xl mx-auto py-12 px-6 sm:px-4">
             <Card title={`${pointsTable[0]?.Title} Standings`}>
                 <Table
                     headers={["Position", "Team Name", "Match", "Wins", "Lost", "NR", "Points", "NRR"]}
-                    rows={sortedPointsTable.map((team, index) => [
+                    rows={pointsTable.map((team, index) => [
                         index + 1,
                         team["Team Name"],
                         team["Match Played"],
@@ -123,11 +116,8 @@ export default function CricketPointsTable() {
                         team["Nr"],
                         team["Points"],
                         team["Nrr"],
-                    ])}
-                />
+                    ])} />
             </Card>
-
-
-        </div>
+        </div></>
     );
 }

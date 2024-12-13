@@ -83,6 +83,7 @@ export default function Live() {
     }
 
     return (
+
         <div className="m-6 flex items-center justify-center min-h-100">
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="p-4">
