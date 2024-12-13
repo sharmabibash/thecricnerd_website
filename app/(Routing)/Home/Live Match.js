@@ -48,8 +48,13 @@ export default function Live() {
 
                 if (data.length > 0) {
                     const topWicketTaker = data.reduce((best, current) => {
-                        return (current['Total Wickets'] > best['Total Wickets'] ||
-                            (current['Total Wickets'] === best['Total Wickets'] && current['Economy Rate'] < best['Economy Rate']))
+                        const currentWickets = parseInt(current['Total Wickets'], 10) || 0;
+                        const bestWickets = parseInt(best['Total Wickets'], 10) || 0;
+                        const currentEconomy = parseFloat(current['Economy Rate']) || Infinity;
+                        const bestEconomy = parseFloat(best['Economy Rate']) || Infinity;
+
+                        return (currentWickets > bestWickets ||
+                            (currentWickets === bestWickets && currentEconomy < bestEconomy))
                             ? current : best;
                     }, data[0]);
 
@@ -104,9 +109,14 @@ export default function Live() {
                         </div>
                     </div>
 
-                    <Link href="./live-stream" passHref>
+                    <Link href="./npl-stats" passHref>
                         <Button className="mt-6 w-full py-2 text-xs bg-[#2e3192] hover:bg-[#1d1f87] text-white font-semibold rounded-lg shadow-lg transition-all ease-in-out duration-300 transform hover:scale-105">
                             More Statistics
+                        </Button>
+                    </Link>
+                    <Link href="./points-table" passHref>
+                        <Button className="mt-6 w-full py-2 text-xs bg-[#2e3192] hover:bg-[#1d1f87] text-white font-semibold rounded-lg shadow-lg transition-all ease-in-out duration-300 transform hover:scale-105">
+                            Points Table
                         </Button>
                     </Link>
                 </div>
