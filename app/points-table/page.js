@@ -48,6 +48,7 @@ function Table({ headers, rows }) {
         </div>
     );
 }
+
 export default function CricketPointsTable() {
     const [pointsTable, setPointsTable] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -68,16 +69,18 @@ export default function CricketPointsTable() {
                 });
                 const data = response.data;
                 if (Array.isArray(data)) {
+                    // Map points for each team
                     const pointsTableWithPoints = data.map(team => ({
                         ...team,
                         points: team.Wins * 2
                     }));
 
-
+                    // Sort by points DESC, then by NRR DESC with negative first
                     const sortedPointsTable = pointsTableWithPoints.sort((a, b) => {
                         if (a.points > b.points) return -1;
                         if (a.points < b.points) return 1;
-                        return parseFloat(b.netRunRate) > parseFloat(a.netRunRate) ? -1 : 1;
+                        // If points are the same, sort by NRR descending (with negatives first)
+                        return b.Nrr - a.Nrr;
                     });
 
                     setPointsTable(sortedPointsTable);
@@ -103,21 +106,27 @@ export default function CricketPointsTable() {
     }
 
     return (
-        <><head><title>{`${pointsTable[0]?.Title} Standings`}</title></head><div className="max-w-6xl mx-auto py-12 px-6 sm:px-4">
-            <Card title={`${pointsTable[0]?.Title} Standings`}>
-                <Table
-                    headers={["Position", "Team Name", "Match", "Wins", "Lost", "NR", "Points", "NRR"]}
-                    rows={pointsTable.map((team, index) => [
-                        index + 1,
-                        team["Team Name"],
-                        team["Match Played"],
-                        team["Wins"],
-                        team["Loss"],
-                        team["Nr"],
-                        team["Points"],
-                        team["Nrr"],
-                    ])} />
-            </Card>
-        </div></>
+        <>
+            <head>
+                <title>{`${pointsTable[0]?.Title} Standings`}</title>
+            </head>
+            <div className="max-w-6xl mx-auto py-12 px-6 sm:px-4">
+                <Card title={`${pointsTable[0]?.Title} Standings`}>
+                    <Table
+                        headers={["Position", "Team Name", "Match", "Wins", "Lost", "NR", "Points", "NRR"]}
+                        rows={pointsTable.map((team, index) => [
+                            index + 1,
+                            team["Team Name"],
+                            team["Match Played"],
+                            team["Wins"],
+                            team["Loss"],
+                            team["Nr"],
+                            team["Points"],
+                            team["Nrr"],
+                        ])}
+                    />
+                </Card>
+            </div>
+        </>
     );
 }
