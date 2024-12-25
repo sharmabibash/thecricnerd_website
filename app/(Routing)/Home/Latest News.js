@@ -10,16 +10,16 @@ const formatPostDate = (dateString) => {
   const now = new Date();
 
   const isToday = now.toDateString() === postDate.toDateString();
-  const daysAgo = Math.floor((now - postDate) / (1000 * 60 * 60 * 24)); // Calculate the number of days
+  const daysAgo = Math.floor((now - postDate) / (1000 * 60 * 60 * 24));
 
   if (isToday) {
     return formatDistance(postDate, now).replace(/about /, '').replace(/ ago/, '') + " ago";
   } else if (daysAgo === 1) {
-    return "1 day ago"; // Singular for 1 day
+    return "1 day ago";
   } else if (daysAgo === 2) {
-    return "2 days ago"; // Singular for 2 days
+    return "2 days ago";
   } else {
-    return format(postDate, 'MMM d, yyyy'); // Formatted date for anything older than 2 days
+    return format(postDate, 'MMM d, yyyy');
   }
 };
 
@@ -66,35 +66,35 @@ const NewsPage = () => {
             <h2 className="text-2xl font-bold mb-4 border-b-2 border-[#2A2A8C] pb-2">{category}</h2>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {newsData[category].map((article, idx) => (
-                <Link href={"Spotlight/"+article['Slug Url']} key={article.ID}>
-                <div
-                  key={idx}
-                  className="rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow h-[445px]"
-                >
-                  <div className="relative h-48 w-full">
-                    <img
-                      src={`${API_BASE_URL + article.Thumbnail}`}
-                      alt={article.Title}
-                      className="rounded-t-lg h-[200px] w-full object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col space-y-1.5 p-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold text-[#2A2A8C] border-[#2A2A8C]">
-                        {category}
-                      </div>
-                      <time className="text-sm text-muted-foreground">{formatPostDate(article["Post Date"])}</time>
+                <Link href={"Spotlight/" + article['Slug Url']} key={article.ID}>
+                  <div
+                    key={idx}
+                    className="rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow h-[445px]"
+                  >
+                    <div className="relative h-48 w-full">
+                      <img
+                        src={`${API_BASE_URL + article.Thumbnail}`}
+                        alt={article.Title}
+                        className="rounded-t-lg h-[200px] w-full object-cover"
+                      />
                     </div>
-                    <h3 className="tracking-tight text-lg font-semibold text-[#2A2A8C]">{article.Title}</h3>
+                    <div className="flex flex-col space-y-1.5 p-6">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold text-[#2A2A8C] border-[#2A2A8C]">
+                          {category}
+                        </div>
+                        <time className="text-sm text-muted-foreground">{formatPostDate(article["Post Date"])}</time>
+                      </div>
+                      <h3 className="tracking-tight text-lg font-semibold text-[#2A2A8C]">{article.Title}</h3>
+                    </div>
+                    <div className="p-6 pt-0">
+                      <p className="text-sm text-muted-foreground"
+                        dangerouslySetInnerHTML={{
+                          __html: TruncateText(article.Description, 100).replace(/\n/g, '<br />'),
+                        }}
+                      ></p>
+                    </div>
                   </div>
-                  <div className="p-6 pt-0">
-                    <p className="text-sm text-muted-foreground"
-                      dangerouslySetInnerHTML={{
-                        __html: TruncateText(article.Description, 100).replace(/\n/g, '<br />'),
-                      }}
-                    ></p>
-                  </div>
-                </div>
                 </Link>
               ))}
             </div>
