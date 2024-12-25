@@ -3,12 +3,16 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button";
+import Loader from "@/Components/Loader";
 
 export default function Live() {
     const API_NPL_BATTING = process.env.NEXT_PUBLIC_API_NPL_BATTING;
     const API_NPL_BOWLING = process.env.NEXT_PUBLIC_API_NPL_BOWLING;
+    const API_TOURNAMENT_NAME = process.env.NEXT_PUBLIC_API_NPL_POINTS_TABLE;
+
     const [mostRuns, setMostRuns] = useState({ player: "", score: "", average: "" });
     const [mostWickets, setMostWickets] = useState({ player: "", wickets: "", economy: "" });
+    const [tournamentName, setTournamentName] = useState("");
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -40,6 +44,20 @@ export default function Live() {
             }
         };
 
+        const fetchTournamentName = async () => {
+            try {
+                const response = await axios.get(API_TOURNAMENT_NAME, { params: { GetAllTeam: true } });
+                const data = response.data;
+
+                if (data.length > 0) {
+                    setTournamentName(data[0]['Title'] || "Unknown Tournament");
+                } else {
+                    console.log('No tournament data found.');
+                }
+            } catch (error) {
+                console.error('Error fetching tournament name:', error);
+            }
+        };
 
         const fetchMostWickets = async () => {
             try {
@@ -59,9 +77,9 @@ export default function Live() {
                     }, data[0]);
 
                     setMostWickets({
-                        player: topWicketTaker['Player Name'],
-                        wickets: topWicketTaker['Total Wickets'],
-                        economy: topWicketTaker['Economy Rate']
+                        player: topWicketTaker['Player Name'] || "Unknown Player",
+                        wickets: topWicketTaker['Total Wickets'] || 0,
+                        economy: topWicketTaker['Economy Rate'] || "N/A"
                     });
                 }
             } catch (error) {
@@ -71,21 +89,23 @@ export default function Live() {
 
         const fetchData = async () => {
             setIsLoading(true);
-            await Promise.all([fetchMostRuns(), fetchMostWickets()]);
+            await Promise.all([fetchMostRuns(), fetchMostWickets(), fetchTournamentName()]);
             setIsLoading(false);
         };
 
         fetchData();
-    }, [API_NPL_BATTING, API_NPL_BOWLING]);
+    }, [API_NPL_BATTING, API_NPL_BOWLING, API_TOURNAMENT_NAME]);
 
+    if (isLoading) {
+        return <Loader />;
+    }
 
     return (
-
         <div className="m-6 flex items-center justify-center min-h-100">
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="p-4">
                     <div className="flex justify-center items-center space-x-3 mb-6">
-                        <h1 className="text-2xl font-semibold text-[#2e3192] text-center">NPL 2024 Stats</h1>
+                        <h1 className="text-2xl font-semibold text-[#2e3192] text-center">{`${tournamentName} Stats`}</h1>
                     </div>
 
                     <div className="mt-4 space-y-4">
@@ -94,7 +114,6 @@ export default function Live() {
                             <div className="text-sm font-semibold text-gray-900 text-center ml-4">
                                 <span className="block">{mostRuns.player}</span>
                                 <span className="block text-[#f83a6f]">{mostRuns.score} Runs</span>
-
                             </div>
                         </div>
 
