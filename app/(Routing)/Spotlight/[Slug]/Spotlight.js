@@ -2,7 +2,26 @@
 import RelatedNews from "../Related News";
 import Head from "next/head";
 import Loader from '@/Components/Loader';
+import { format, formatDistance, parseISO } from 'date-fns';
 
+
+const formatPostDate = (dateString) => {
+  const postDate = parseISO(dateString);
+  const now = new Date();
+
+  const isToday = now.toDateString() === postDate.toDateString();
+  const daysAgo = Math.floor((now - postDate) / (1000 * 60 * 60 * 24)); 
+
+  if (isToday) {
+    return formatDistance(postDate, now).replace(/about /, '').replace(/ ago/, '') + " ago";
+  } else if (daysAgo === 1) {
+    return "1 day ago"; // Singular for 1 day
+  } else if (daysAgo === 2) {
+    return "2 days ago"; // Singular for 2 days
+  } else {
+    return format(postDate, 'MMM d, yyyy'); // Formatted date for anything older than 2 days
+  }
+};
 
 const Spotlight = ({ spotlightData, API_BASE_URL }) => {
   if (!spotlightData || spotlightData.length === 0) {
@@ -39,16 +58,13 @@ const Spotlight = ({ spotlightData, API_BASE_URL }) => {
           <div className="flex flex-col items-start space-y-4">
             {spotlightData.map((Item) => (
               <div key={Item['ID']}>
-                <div className="inline-block rounded-lg bg-primary px-3 py-1 text-sm font-medium text-primary-foreground">
-                  Cricket
-                </div>
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-[#2e3192] mb-2">
                   {Item.Title}
                 </h1>
                 <div className="flex items-center space-x-4 text-muted-foreground">
                   <div>{Item.Author}</div>
                   <div>|</div>
-                  <div>{Item['Post Date']}</div>
+                  <div>{formatPostDate(Item['Post Date'])}</div>
                 </div>
               </div>
             ))}

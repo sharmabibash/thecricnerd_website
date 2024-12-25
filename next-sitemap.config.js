@@ -10,7 +10,8 @@ const categorySlugs = [
   '/category/nepal-premier-league',
   '/category/nepal-national',
   '/category/nepal-domestic',
-  '/category/nepal-editorial'
+  '/category/nepal-editorial',
+  '/category/elite-cup-jay-trophy'
 ];
 
 async function fetchDynamicSlugs() {

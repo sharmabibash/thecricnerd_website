@@ -27,6 +27,12 @@ export default function NewsCategories() {
       description: "Expert analysis and opinion pieces on Nepal cricket",
       slug: "editorial",
       src: "Images/Logo/The Cricket Nerd.png"
+    },
+    {
+      title: "Elite Cup (Jay Trophy)",
+      description: "Detailed coverage, expert analysis, and updates on the Elite Cup (Jay Trophy), a premier domestic cricket tournament in Nepal.",
+      slug: "elite-cup-jay-trophy",
+      src: "Images/Logo/Elite Cup (Jay Trophy).jpg"
     }
   ]
 

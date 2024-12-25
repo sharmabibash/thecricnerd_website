@@ -63,6 +63,27 @@ const MetaInfo = ({ Slug }) => {
           robots: { index: true, follow: true },
         };
 
+      case 'elite-cup-jay-trophy':
+        return {
+          title: 'Elite Cup (Jay Trophy) | Nepal Cricket Tournament | Matches, Updates, Insights',
+          description:
+            'Discover the Elite Cup (Jay Trophy), a premier domestic cricket tournament in Nepal. Get match updates, player news, and in-depth analysis from The Cricket Nerd.',
+          keywords:
+            'Elite Cup Nepal, Jay Trophy Nepal cricket, Nepal cricket tournaments, domestic cricket Nepal, Nepal cricket news, Nepal cricket players',
+          canonical: 'https://www.thecricketnerd.com/category/elite-cup-jay-trophy',
+          openGraph: {
+            title: 'Elite Cup (Jay Trophy) | Nepal Cricket Tournament | Matches, Updates, Insights',
+            description:
+              'Discover the Elite Cup (Jay Trophy), a premier domestic cricket tournament in Nepal. Get match updates, player news, and in-depth analysis from The Cricket Nerd.',
+            type: 'article',
+            image: 'https://www.thecricketnerd.com/Images/Logo/Elite Cup (Jay Trophy).jpg',
+            url: 'https://www.thecricketnerd.com/category/elite-cup-jay-trophy',
+            locale: 'en_US',
+          },
+          robots: { index: true, follow: true },
+        };
+
+
       default:
         return {
           title: 'The Cricket Nerd | Nepal Cricket News, Matches, Players',
@@ -87,9 +108,9 @@ const MetaInfo = ({ Slug }) => {
 
   useEffect(() => {
     const meta = getMetaInfo(Slug);
-  
+
     document.title = meta.title;
-  
+
     // Meta description
     let metaDescription = document.querySelector('meta[name="description"]');
     if (!metaDescription) {
@@ -98,7 +119,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaDescription);
     }
     metaDescription.content = meta.description;
-  
+
     // Meta keywords
     let metaKeywords = document.querySelector('meta[name="keywords"]');
     if (!metaKeywords) {
@@ -107,7 +128,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaKeywords);
     }
     metaKeywords.content = meta.keywords;
-  
+
     // Canonical link
     let linkCanonical = document.querySelector('link[rel="canonical"]');
     if (!linkCanonical) {
@@ -116,7 +137,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(linkCanonical);
     }
     linkCanonical.href = meta.canonical;
-  
+
     // Open Graph meta tags
     let metaOgTitle = document.querySelector('meta[property="og:title"]');
     if (!metaOgTitle) {
@@ -125,7 +146,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaOgTitle);
     }
     metaOgTitle.content = meta.openGraph.title;
-  
+
     let metaOgDescription = document.querySelector('meta[property="og:description"]');
     if (!metaOgDescription) {
       metaOgDescription = document.createElement('meta');
@@ -133,7 +154,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaOgDescription);
     }
     metaOgDescription.content = meta.openGraph.description;
-  
+
     let metaOgType = document.querySelector('meta[property="og:type"]');
     if (!metaOgType) {
       metaOgType = document.createElement('meta');
@@ -141,7 +162,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaOgType);
     }
     metaOgType.content = meta.openGraph.type;
-  
+
     let metaOgImage = document.querySelector('meta[property="og:image"]');
     if (!metaOgImage) {
       metaOgImage = document.createElement('meta');
@@ -149,7 +170,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaOgImage);
     }
     metaOgImage.content = meta.openGraph.image;
-  
+
     let metaOgUrl = document.querySelector('meta[property="og:url"]');
     if (!metaOgUrl) {
       metaOgUrl = document.createElement('meta');
@@ -157,7 +178,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaOgUrl);
     }
     metaOgUrl.content = meta.openGraph.url;
-  
+
     let metaOgLocale = document.querySelector('meta[property="og:locale"]');
     if (!metaOgLocale) {
       metaOgLocale = document.createElement('meta');
@@ -165,7 +186,7 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaOgLocale);
     }
     metaOgLocale.content = meta.openGraph.locale;
-  
+
     // Meta robots
     let metaRobots = document.querySelector('meta[name="robots"]');
     if (!metaRobots) {
@@ -174,9 +195,9 @@ const MetaInfo = ({ Slug }) => {
       document.head.appendChild(metaRobots);
     }
     metaRobots.content = meta.robots.index ? 'index, follow' : 'noindex, nofollow';
-  
+
   }, [Slug]);
-  
+
 
   return null;
 };

@@ -28,7 +28,7 @@ const RelatedNews = () => {
         <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {RelatedNews.map((Item) => (
-                    <div key={Item['ID']} className="w-full max-w-md border p-4 rounded-lg"> 
+                    <div key={Item['ID']} className="w-full max-w-md border p-4 rounded-lg">
                         <Link href={Item['Slug Url']} className="group block overflow-hidden rounded-lg">
                             <img
                                 src={`${API_BASE_URL + Item.Thumbnail}`}
@@ -45,9 +45,11 @@ const RelatedNews = () => {
                                         {TruncateText(Item.Title, 30)}
                                     </h3>
                                 </Link>
-                                <p className="text-muted-foreground">
-                                    {TruncateText(Item.Description, 100)}
-                                </p>
+                                <p className="text-sm text-muted-foreground"
+                                    dangerouslySetInnerHTML={{
+                                        __html: TruncateText(Item.Description, 100).replace(/\n/g, '<br />'),
+                                    }}
+                                ></p>
                             </div>
                             <div className="mt-4">
                                 <Link

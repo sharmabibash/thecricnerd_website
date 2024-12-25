@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import Loader from '@/Components/Loader';
+import PointsTableMetaInfo from "@/Components/MetaInfo/PointsTableMetaInfo";
 
 function Card({ title, children }) {
     return (
@@ -69,13 +71,17 @@ export default function CricketPointsTable() {
                 });
                 const data = response.data;
                 if (Array.isArray(data)) {
+                    // Map points for each team
                     const pointsTableWithPoints = data.map(team => ({
                         ...team,
                         points: team.Wins * 2
                     }));
+
+                    // Sort by points DESC, then by NRR DESC with negative first
                     const sortedPointsTable = pointsTableWithPoints.sort((a, b) => {
                         if (a.points > b.points) return -1;
                         if (a.points < b.points) return 1;
+                        // If points are the same, sort by NRR descending (with negatives first)
                         return b.Nrr - a.Nrr;
                     });
 
@@ -94,7 +100,7 @@ export default function CricketPointsTable() {
     }, []);
 
     if (isLoading) {
-        return <div className="text-center mt-10">Loading...</div>;
+        return <Loader/>;
     }
 
     if (errorMessage) {
@@ -103,9 +109,7 @@ export default function CricketPointsTable() {
 
     return (
         <>
-            <head>
-                <title>{`${pointsTable[0]?.Title} Standings`}</title>
-            </head>
+            <PointsTableMetaInfo />
             <div className="max-w-6xl mx-auto py-12 px-6 sm:px-4">
                 <Card title={`${pointsTable[0]?.Title} Standings`}>
                     <Table

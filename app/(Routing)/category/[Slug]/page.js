@@ -1,7 +1,6 @@
 "use client";
 import axios from 'axios';
 import Link from "next/link";
-import Head from 'next/head'
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button"
@@ -88,7 +87,7 @@ export default function Page() {
                   />
                 </div>
                 <CardHeader>
-                  <CardDescription>{formatPostDate(data['Post Date'])}</CardDescription>
+                  <CardDescription className="mt-4">{formatPostDate(data['Post Date'])}</CardDescription>
                   <CardTitle className="text-xl text-[#1e3a8a]">{data.Title}</CardTitle>
                   <CardDescription
                     dangerouslySetInnerHTML={{
