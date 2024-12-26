@@ -32,8 +32,6 @@ export default function RegistrationForm() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-
-        // Validate password length and match
         if (password.length < 6) {
             setPasswordError("Password must be at least 6 characters long");
             toast.error("Password must be at least 6 characters long");
@@ -62,7 +60,7 @@ export default function RegistrationForm() {
             console.log(response.data);
 
             if (response.data?.status === "success") {
-                // Store the user's email in localStorage
+
                 localStorage.setItem('userEmail', email);
 
                 toast.success(response.data.message || "Account created successfully!");

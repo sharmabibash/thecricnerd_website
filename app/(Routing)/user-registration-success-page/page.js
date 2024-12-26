@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
 import gsap from "gsap";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function UserRegisteredSuccess() {
     const router = useRouter();
@@ -48,6 +50,7 @@ export default function UserRegisteredSuccess() {
     const handleResendLink = async () => {
         if (!userEmail) {
             setError("Email not found. Please try again later.");
+            toast.error("Email not found. Please try again later.");
             return;
         }
 
@@ -68,12 +71,14 @@ export default function UserRegisteredSuccess() {
             const data = await response.json();
 
             if (response.ok) {
-                alert("Verification link has been resent to your email.");
+                toast.success("Verification link has been resent to your email.");
             } else {
                 setError("Failed to resend the verification link. Please try again.");
+                toast.error("Failed to resend the verification link. Please try again.");
             }
         } catch (err) {
             setError("An error occurred. Please try again.");
+            toast.error("An error occurred. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -116,6 +121,7 @@ export default function UserRegisteredSuccess() {
                     </Button>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }
