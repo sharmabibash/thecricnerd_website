@@ -69,6 +69,9 @@ export default function Navbar() {
             <li>
               <Link href="/Statistics" onClick={closeMenu}>Players</Link>
             </li>
+            <li>
+              <Link href="/user-registration" onClick={closeMenu}>Live Quiz Online</Link>
+            </li>
           </ul>
         </nav>
       </header>
