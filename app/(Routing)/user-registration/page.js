@@ -32,11 +32,14 @@ export default function RegistrationForm() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate password length and match
         if (password.length < 6) {
             setPasswordError("Password must be at least 6 characters long");
             toast.error("Password must be at least 6 characters long");
             return;
         }
+
         if (password !== verifypassword) {
             setPasswordError("Passwords do not match");
             toast.error("Passwords do not match");
@@ -59,6 +62,9 @@ export default function RegistrationForm() {
             console.log(response.data);
 
             if (response.data?.status === "success") {
+                // Store the user's email in localStorage
+                localStorage.setItem('userEmail', email);
+
                 toast.success(response.data.message || "Account created successfully!");
                 router.push("/user-registration-success-page");
             } else {
@@ -86,7 +92,7 @@ export default function RegistrationForm() {
                                 Create an account
                             </CardTitle>
                             <CardDescription className="text-center text-base">
-                                Join our quiz community and explore your knowledge!
+                                Join our community and explore your knowledge!
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="grid gap-4">
@@ -216,8 +222,7 @@ export default function RegistrationForm() {
                                     className="underline underline-offset-4 hover:text-primary"
                                 >
                                     Privacy Policy
-                                </a>
-                                .
+                                </a>.
                             </p>
                         </CardFooter>
                     </Card>
